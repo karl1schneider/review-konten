@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Review Konten</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <button class="brand" id="home" type="button">Review <i>Konten</i></button>
+  <nav class="tabs" aria-label="Halaman" id="tabs" hidden>
+    <button type="button" data-tab="konten" aria-current="true">Konten</button>
+    <button type="button" data-tab="atur" id="tabAtur" hidden>⚙ Pengaturan</button>
+  </nav>
+  <button class="bell" id="bell" type="button" aria-label="Notifikasi" hidden>🔔<b id="bellN" hidden>0</b></button>
+</div></header>
+<main class="wrap" id="app"><p class="loading">Memuat…</p></main>
+<div id="modalRoot"></div>
+<div class="toast" id="toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
