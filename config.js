@@ -2,5 +2,5 @@
 // Keduanya memang boleh terlihat publik; keamanan diatur oleh aturan database.
 window.REVIEW_CONFIG = {
   SUPABASE_URL: "https://ygkkcufvxsqezmruvwib.supabase.co",
-  SUPABASE_ANON_KEY: "ISI-ANON-KEY",
+  SUPABASE_ANON_KEY: "sb_publishable_nIAJG3jXpH5dOcGWTTwtAQ_69Ew7WT2",
 };
