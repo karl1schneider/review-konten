@@ -355,6 +355,7 @@ function openUpload(rev) {
   $('#upf').onsubmit = async e => {
     e.preventDefault();
     const files = [...$('#uFile').files], err = $('#uErr'), show = m => { err.textContent = m; err.hidden = false };
+    if (!profile) return show('Sesi kamu habis. Muat ulang halaman, lalu coba lagi.');
     if (!files.length) return show('Pilih file dulu.');
     const vids = files.filter(f => f.type.startsWith('video'));
     if (vids.length && files.length > 1) return show('Video harus diupload sendiri, satu file saja.');
@@ -491,12 +492,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('#modalR
     session = (await sb.auth.getSession()).data.session;
     await loadProfile(); await loadAll(); render();
   } catch (e) { $('#app').innerHTML = `<p class="empty">Gagal memuat data: ${esc(e.message)}</p>`; return }
-  sb.auth.onAuthStateChange(async (ev, s) => {
+  sb.auth.onAuthStateChange((ev, s) => {
     // Supabase juga mengirim SIGNED_IN saat tab kembali aktif (misalnya setelah memilih file); abaikan kalau orangnya sama
     const same = s?.user?.id && s.user.id === session?.user?.id && profile;
     if (ev === 'TOKEN_REFRESHED' || ev === 'INITIAL_SESSION' || ev === 'USER_UPDATED' || (ev === 'SIGNED_IN' && same)) { session = s; return }
-    session = s; await loadProfile(); await loadAll(); tab = 'konten'; view.page = 'list'; render();
-    if (ev === 'SIGNED_IN' && profile) toast('Halo, ' + profile.name);
+    session = s;
+    // query Supabase di dalam callback ini bisa macet, jadi ditunda sebentar
+    setTimeout(async () => {
+      await loadProfile(); await loadAll(); tab = 'konten'; view.page = 'list'; render();
+      if (ev === 'SIGNED_IN' && profile) toast('Halo, ' + profile.name);
+    }, 0);
   });
   sb.channel('semua').on('postgres_changes', { event: '*', schema: 'public' }, scheduleReload).subscribe();
 })();
