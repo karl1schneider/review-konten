@@ -186,3 +186,4 @@ tr:last-child td{border-bottom:0}
 .ver{font-size:12px;color:var(--muted)}
 .prog{height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
 .prog div{height:100%;background:var(--g4);width:0}
+.gf .badge,.box .badge{justify-self:start;margin:0}

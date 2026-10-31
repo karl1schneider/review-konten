@@ -107,7 +107,7 @@ function landingHTML() {
   <div class="landing">
    <form class="box gf" id="revF"><p class="badge">Reviewer</p><h2>Saya mau mereview</h2>
     <p class="sub">Tidak perlu akun. Tulis nama supaya kreator tahu siapa yang memberi komentar.</p>
-    <label>Nama<input type="text" id="rName" required maxlength="60" placeholder="mis. Pak Yoseph" autocomplete="name"></label>
+    <label>Nama<input type="text" id="rName" required maxlength="60" placeholder="Masukkan nama kamu" autocomplete="name"></label>
     <button class="btn" type="submit">Mulai review</button></form>
    <form class="box gf" id="authF"><p class="badge">Kreator &amp; admin</p><h2>${m === 'masuk' ? 'Masuk' : 'Daftar jadi kreator'}</h2>
     <div class="seg" role="group"><button type="button" data-auth="masuk" aria-pressed="${m === 'masuk'}">Masuk</button><button type="button" data-auth="daftar" aria-pressed="${m === 'daftar'}">Daftar</button></div>
