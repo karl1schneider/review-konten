@@ -36,7 +36,7 @@ async function loadAll() {
     sb.from('comments').select('*').order('id'),
     sb.from('replies').select('*').order('id'),
     sb.from('notifications').select('*').order('id', { ascending: false }).limit(60),
-    profile?.role === 'admin' ? sb.from('profiles').select('*').order('created_at') : Promise.resolve({ data: [] }),
+    profile?.role === 'admin' ? sb.rpc('admin_profiles') : Promise.resolve({ data: [] }),
   ]);
   const bad = q.find(r => r.error); if (bad) throw bad.error;
   [D.settings, D.cats, D.items, D.comments, D.replies, D.notifs, D.profiles] = q.map(r => r.data);
@@ -56,7 +56,7 @@ document.addEventListener('focusout', () => setTimeout(() => { if (pendingRender
 async function loadProfile() {
   profile = null;
   if (!session) return;
-  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+  const { data } = await sb.from('profiles').select('id,name,role,created_at').eq('id', session.user.id).single();
   profile = data;
 }
 

@@ -181,6 +181,15 @@ create policy "ubah profil sendiri atau admin" on public.profiles for update
   using (id = auth.uid() or public.is_admin())
   with check (public.is_admin() or (id = auth.uid() and role = (select role from public.profiles p where p.id = auth.uid())));
 create policy "admin hapus profil" on public.profiles for delete using (public.is_admin());
+-- email hanya bisa dibaca admin (lewat admin_profiles)
+revoke select on public.profiles from anon, authenticated;
+grant select (id, name, role, created_at) on public.profiles to anon, authenticated;
+create or replace function public.admin_profiles()
+returns setof public.profiles
+language sql stable security definer set search_path = public as $$
+  select * from profiles where public.is_admin() order by created_at;
+$$;
+grant execute on function public.admin_profiles() to authenticated;
 
 create policy "baca pengaturan" on public.settings for select using (true);
 create policy "admin ubah pengaturan" on public.settings for update using (public.is_admin());
