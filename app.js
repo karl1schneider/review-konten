@@ -54,8 +54,7 @@ function safeRender() {
 document.addEventListener('focusout', () => setTimeout(() => { if (pendingRender && !view.draft) { pendingRender = false; render() } }, 200));
 
 async function loadProfile() {
-  profile = null;
-  if (!session) return;
+  if (!session) { profile = null; return }
   const { data } = await sb.from('profiles').select('id,name,role,created_at').eq('id', session.user.id).single();
   profile = data;
 }
@@ -493,7 +492,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('#modalR
     await loadProfile(); await loadAll(); render();
   } catch (e) { $('#app').innerHTML = `<p class="empty">Gagal memuat data: ${esc(e.message)}</p>`; return }
   sb.auth.onAuthStateChange(async (ev, s) => {
-    if (ev === 'TOKEN_REFRESHED' || ev === 'INITIAL_SESSION') { session = s; return }
+    // Supabase juga mengirim SIGNED_IN saat tab kembali aktif (misalnya setelah memilih file); abaikan kalau orangnya sama
+    const same = s?.user?.id && s.user.id === session?.user?.id && profile;
+    if (ev === 'TOKEN_REFRESHED' || ev === 'INITIAL_SESSION' || ev === 'USER_UPDATED' || (ev === 'SIGNED_IN' && same)) { session = s; return }
     session = s; await loadProfile(); await loadAll(); tab = 'konten'; view.page = 'list'; render();
     if (ev === 'SIGNED_IN' && profile) toast('Halo, ' + profile.name);
   });
