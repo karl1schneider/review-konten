@@ -369,7 +369,7 @@ function openUpload(rev) {
         const ext = (f.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
         const path = `${profile.id}/${id}/v${ver}-${String(i + 1).padStart(2, '0')}.${ext}`;
         const { error } = await sb.storage.from('media').upload(path, f, { contentType: f.type });
-        if (error) throw error;
+        if (error) throw new Error('file tidak bisa disimpan (' + error.message + ')');
         paths.push(path); bar.firstElementChild.style.width = ((i + 1) / files.length * 100) + '%';
       }
       if (rev) {
@@ -378,7 +378,7 @@ function openUpload(rev) {
         if (old.length) await sb.storage.from('media').remove(old);
       } else {
         const { error } = await sb.from('items').insert({ id, title: $('#uTitle').value.trim(), category_id: $('#uCat').value, kind, caption: $('#uCap').value, media: paths, owner: profile.id, owner_name: profile.name });
-        if (error) throw error;
+        if (error) throw new Error('data konten tidak bisa disimpan (' + error.message + ')');
       }
       $('#modalRoot').innerHTML = ''; await loadAll(); view = { ...view, page: 'detail', id, slide: 0, active: null }; render();
       toast(rev ? 'Revisi terkirim, reviewer diberi tahu' : 'Terkirim, reviewer diberi tahu');
