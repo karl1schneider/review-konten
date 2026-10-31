@@ -368,7 +368,7 @@ function openUpload(rev) {
       for (const [i, f] of files.entries()) {
         const ext = (f.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
         const path = `${profile.id}/${id}/v${ver}-${String(i + 1).padStart(2, '0')}.${ext}`;
-        const { error } = await sb.storage.from('media').upload(path, f, { contentType: f.type, upsert: true });
+        const { error } = await sb.storage.from('media').upload(path, f, { contentType: f.type });
         if (error) throw error;
         paths.push(path); bar.firstElementChild.style.width = ((i + 1) / files.length * 100) + '%';
       }
